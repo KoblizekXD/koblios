@@ -10,6 +10,10 @@ TEST_BINARY = test/disk.bin
 
 .PHONY: all clean
 
+run: $(OUTPUT)
+	./$(OUTPUT)
+
+
 all: $(OUTPUT)
 
 $(OUTPUT): $(OBJ)
@@ -25,6 +29,3 @@ $(BUILD)/:
 clean:
 	rm -rf $(BUILD)
 	mkdir -p $(BUILD)
-
-run: $(OUTPUT)
-	./$(OUTPUT) $(TEST_BINARY)
