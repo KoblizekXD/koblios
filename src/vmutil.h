@@ -42,7 +42,7 @@ inline void set_hreg(x86_reg* reg, uint8_t value) {
 	*reg = (*reg & 0xFFFF00FF) | (value << 8);
 }
 
-typedef struct bios_mem {
+typedef struct memory {
 	uint8_t ivt[KiB(1)];
 	uint8_t bda[256];
 	uint8_t conventional[30464];
@@ -53,10 +53,6 @@ typedef struct bios_mem {
 	uint8_t video_bios[KiB(32)];
 	uint8_t bios_expansion[KiB(160)];
 	uint8_t mb_bios[KiB(64)];
-} bios_t;
-
-typedef struct mem {
-	bios_t bios;
 	uint8_t *ext;
 } memory_t;
 
