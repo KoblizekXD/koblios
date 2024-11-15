@@ -60,7 +60,7 @@ void draw_callback()
 	    if (text) {
     	    text[length] = '\0';
 			
-			__DrawText(text, 1, 1, 18, GRAY);
+			__DrawText(text, 1, 1, 14, GRAY);
 	        free(text);
 	    }
 	}
@@ -72,7 +72,9 @@ void init_disp(uint8_t *text_memory, uint8_t* video_memory)
 {
 	SetTraceLogLevel(LOG_WARNING);
 	InitWindow(800, 600, "BIOS Emulation Service");
-	font = LoadFont("resources/Mx437_IBM_VGA_8x14.ttf");
+//	font = LoadFontEx("resources/Bm437_IBM_VGA_8x16.tt", 16, 0, 437);
+	font = LoadFontEx("resources/Mx437_IBM_VGA_8x14.ttf", 14, 0, 437);
+	SetTextureFilter(font.texture, TEXTURE_FILTER_POINT);
 	ClearWindowState(FLAG_WINDOW_RESIZABLE);
 	_text_mode_location = text_memory;
 	_video_mode_location = video_memory;
