@@ -8,6 +8,7 @@
 uint8_t *_text_mode_location;
 uint8_t *_video_mode_location;
 uint8_t mode = 0x0;
+Font font;
 
 #define TEXT_MODE 0x0
 #define VIDEO_MODE 0x1
@@ -25,6 +26,12 @@ struct _character get_char(uint8_t *location)
 int is_char(uint8_t *location)
 {
 	return location[0] != 0x0;
+}
+
+
+void __DrawText(const char *text, int posX, int posY, int fontSize, Color color)
+{
+    DrawTextEx(font, text, (Vector2){ posX, posY }, fontSize, 1, color);
 }
 
 void draw_callback()
@@ -52,7 +59,8 @@ void draw_callback()
 
 	    if (text) {
     	    text[length] = '\0';
-			DrawText(text, 1, 1, 18, GRAY);
+			
+			__DrawText(text, 1, 1, 18, GRAY);
 	        free(text);
 	    }
 	}
@@ -64,6 +72,7 @@ void init_disp(uint8_t *text_memory, uint8_t* video_memory)
 {
 	SetTraceLogLevel(LOG_WARNING);
 	InitWindow(800, 600, "BIOS Emulation Service");
+	font = LoadFont("resources/Mx437_IBM_VGA_8x14.ttf");
 	ClearWindowState(FLAG_WINDOW_RESIZABLE);
 	_text_mode_location = text_memory;
 	_video_mode_location = video_memory;

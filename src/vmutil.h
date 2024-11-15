@@ -14,35 +14,35 @@
 
 #define MEMSET(MEMORY, ADDRESS, VALUE) ((uint8_t*) MEMORY)[ADDRESS] = VALUE
 
-typedef uint32_t x86_reg;
+typedef uint32_t _x86_reg;
 
 typedef struct _cpu {
-	x86_reg eax;
-	x86_reg ebx;
-	x86_reg ecx;
-	x86_reg edx;
-	x86_reg esi;
-	x86_reg edi;
-	x86_reg esp;
-	x86_reg ebp;
+	_x86_reg eax;
+	_x86_reg ebx;
+	_x86_reg ecx;
+	_x86_reg edx;
+	_x86_reg esi;
+	_x86_reg edi;
+	_x86_reg esp;
+	_x86_reg ebp;
 
-	x86_reg eip;
-	x86_reg eflags;
+	_x86_reg eip;
+	_x86_reg eflags;
 
-	x86_reg cr0;
-	x86_reg cr4;
+	_x86_reg cr0;
+	_x86_reg cr4;
 } cpu_t;
 
 // Sets the lower 16 bits of the given register(e.g. sets AX of EAX register)
-inline void set_xreg(x86_reg* reg, uint16_t value) {
+inline void set_xreg(_x86_reg* reg, uint16_t value) {
     *reg = (*reg & 0xFFFF0000) | value;
 }
 // Sets the lowest 8 bits of the given register(e.g. sets AL of EAX register)
-inline void set_lreg(x86_reg* reg, uint8_t value) {
+inline void set_lreg(_x86_reg* reg, uint8_t value) {
 	*reg = (*reg & 0xFFFFFF00) | value;
 }
 // Sets the 2nd lowest 8 bits of the given register(e.g. sets AH of EAX register)
-inline void set_hreg(x86_reg* reg, uint8_t value) {
+inline void set_hreg(_x86_reg* reg, uint8_t value) {
 	*reg = (*reg & 0xFFFF00FF) | (value << 8);
 }
 

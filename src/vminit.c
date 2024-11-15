@@ -6,6 +6,7 @@
 #include <vminit.h>
 #include <vmutil.h>
 #include <string.h>
+#include <capstone/capstone.h>
 
 cpu_t *__cpu(mem_p memory)
 {
@@ -58,6 +59,17 @@ void process_bootsector(cpu_t* cpu, mem_p memory)
 			MEMSET(memory, 0xB8000 + (i * 2), text[i]);
 		}
 		return;
+	}
+
+	csh handle;
+	if (cs_open(CS_ARCH_X86, CS_MODE_64, &handle) != CS_ERR_OK)
+		return;
+	cs_option(handle, CS_OPT_DETAIL, CS_OPT_ON);
+	cs_insn* insn;
+	size_t count = cs_disasm(handle, base_address, 510, 0x7C00, 0, &insn);
+
+	for (size_t i = 0; i < count; i++) {
+		cs_insn instruction = insn[i];
 	}
 }
 
