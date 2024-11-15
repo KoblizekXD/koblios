@@ -10,6 +10,10 @@
 #define L_REG(REGISTER) ((REGISTER) & 0xFF)
 #define H_REG(REGISTER) ((REGISTER >> 8) & 0xFF)
 
+#define UINT16_T(ADDRESS) ((uint16_t)((*(ADDRESS)) | ((*(ADDRESS + 1)) << 8)))
+
+#define MEMSET(MEMORY, ADDRESS, VALUE) ((uint8_t*) MEMORY)[ADDRESS] = VALUE
+
 typedef uint32_t x86_reg;
 
 typedef struct _cpu {

@@ -50,10 +50,15 @@ extern void draw_callback();
 // Dispatch 512 byte capstone engine
 void process_bootsector(cpu_t* cpu, mem_p memory)
 {
-	((uint8_t*) memory)[0xB8000] = 'A';
-	printf("%p\n", ((uint8_t*) memory + 0xB8000));
-	((uint8_t*)memory)[0xB8001] = 0x01;
 	uint8_t *base_address = (uint8_t*) memory + 0x7C00;
+
+	if (UINT16_T(base_address + 510) != 0xAA55) {
+		const char* text = "Error: Invalid boot-sector.";
+		for (size_t i = 0; i < strlen(text); i++) {
+			MEMSET(memory, 0xB8000 + (i * 2), text[i]);
+		}
+		return;
+	}
 }
 
 /*
@@ -64,6 +69,11 @@ void process_bootsector(cpu_t* cpu, mem_p memory)
 void __emulate_begin(cpu_t *cpu, mem_p memory)
 {
 	init_disp((uint8_t*) memory + 0xB8000, (uint8_t*) memory + 0xA0000);
+
+	const char* text = "Simple BIOS Emulator by aa55h";
+	for (size_t i = 0; i < strlen(text); i++) {
+		MEMSET(memory, 0xB8000 + (i * 2), text[i]);
+	}
 
 	process_bootsector(cpu, memory);
 
