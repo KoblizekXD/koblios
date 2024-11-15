@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <raylib.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vminit.h>
@@ -8,6 +10,8 @@
 cpu_t *__cpu(mem_p memory)
 {
 	cpu_t* cpu = (cpu_t *) calloc(1, sizeof(cpu_t));
+	cpu->ebp = 0x7BFF;
+	cpu->esp = cpu->ebp;
 	return cpu;
 }
 
@@ -40,6 +44,18 @@ void __mem_destroy(mem_p memory)
 	free(memory);
 }
 
+extern void init_disp(uint8_t* text_memory, uint8_t* video_memory);
+extern void draw_callback();
+
+// Dispatch 512 byte capstone engine
+void process_bootsector(cpu_t* cpu, mem_p memory)
+{
+	((uint8_t*) memory)[0xB8000] = 'A';
+	printf("%p\n", ((uint8_t*) memory + 0xB8000));
+	((uint8_t*)memory)[0xB8001] = 0x01;
+	uint8_t *base_address = (uint8_t*) memory + 0x7C00;
+}
+
 /*
  * This function is responsible for:
  * - Default screen render job
@@ -47,5 +63,14 @@ void __mem_destroy(mem_p memory)
  */
 void __emulate_begin(cpu_t *cpu, mem_p memory)
 {
+	init_disp((uint8_t*) memory + 0xB8000, (uint8_t*) memory + 0xA0000);
 
+	process_bootsector(cpu, memory);
+
+	while (!WindowShouldClose())
+	{
+		draw_callback();
+	}
+
+	CloseWindow();
 }

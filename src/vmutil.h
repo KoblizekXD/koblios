@@ -54,7 +54,7 @@ typedef struct memory {
 	uint8_t bios_expansion[KiB(160)];
 	uint8_t mb_bios[KiB(64)];
 	uint8_t *ext;
-} memory_t;
+} __attribute__((packed)) memory_t;
 
 typedef memory_t *mem_p;
 
