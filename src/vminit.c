@@ -7,6 +7,7 @@
 #include <vmutil.h>
 #include <string.h>
 #include <capstone/capstone.h>
+#include <insndef.h>
 
 cpu_t *__cpu(mem_p memory)
 {
@@ -70,6 +71,9 @@ void process_bootsector(cpu_t* cpu, mem_p memory)
 
 	for (size_t i = 0; i < count; i++) {
 		cs_insn instruction = insn[i];
+		instruction_callback cb = match_callback(instruction);
+		if (cb != NULL)
+			cb(cpu, memory, instruction, instruction.detail->x86.operands);
 	}
 }
 
