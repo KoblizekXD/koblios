@@ -9,6 +9,7 @@
 #include <capstone/capstone.h>
 #include <capstone/x86.h>
 #include <capstone/xcore.h>
+#include <stdio.h>
 #include <string.h>
 
 #include <vmutil.h>
@@ -25,7 +26,12 @@ typedef struct _instruction {
 	void NAME##_callback(cpu_t *cpu, mem_p memory, cs_insn instruction, cs_x86_op *operands)
 
 DEFINE_INSTRUCTION(mov, 2) {
+	
+}
 
+DEFINE_INSTRUCTION(hlt, 0) {
+	memory->mb_bios[0] = 0x1;
+	printf("Instruction execution paused.\n");
 }
 
 #define BEGIN_SWITCH(FIRST) if (strcmp(instruction.mnemonic, #FIRST) == 0 && instruction.detail->x86.op_count == insn_data_##FIRST.operand_count) return &FIRST##_callback;
@@ -34,6 +40,7 @@ DEFINE_INSTRUCTION(mov, 2) {
 instruction_callback match_callback(cs_insn instruction)
 {
 	BEGIN_SWITCH(mov)
+		OR(hlt)
 	return NULL;
 }
 
