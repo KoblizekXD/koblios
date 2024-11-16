@@ -8,6 +8,7 @@
 uint8_t *_text_mode_location;
 uint8_t *_video_mode_location;
 uint8_t mode = 0x0;
+uint8_t frame = 0x0;
 Font font;
 
 #define TEXT_MODE 0x0
@@ -61,8 +62,13 @@ void draw_callback()
     	    text[length] = '\0';
 			
 			__DrawText(text, 1, 1, 14, GRAY);
+			
+			if (frame > 15) __DrawText("\u2581", 1, 2 + 14, 14, GRAY);
 	        free(text);
 	    }
+		if (frame == 30)
+			frame = 0;
+		else frame++;
 	}
 
 	EndDrawing();
@@ -72,9 +78,9 @@ void init_disp(uint8_t *text_memory, uint8_t* video_memory)
 {
 	SetTraceLogLevel(LOG_WARNING);
 	InitWindow(800, 600, "BIOS Emulation Service");
+	SetTargetFPS(30);
 //	font = LoadFontEx("resources/Bm437_IBM_VGA_8x16.tt", 16, 0, 437);
-	font = LoadFontEx("resources/Mx437_IBM_VGA_8x14.ttf", 14, 0, 437);
-	SetTextureFilter(font.texture, TEXTURE_FILTER_POINT);
+	font = LoadFontEx("resources/MxPlus_IBM_VGA_8x14.ttf", 14, 0, 65535);
 	ClearWindowState(FLAG_WINDOW_RESIZABLE);
 	_text_mode_location = text_memory;
 	_video_mode_location = video_memory;
